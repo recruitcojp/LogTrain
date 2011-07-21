@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ==============================================================
+      build.xml
+      
+      Version 0.1 2011/04/25 新規作成
+	  
+	  Copyright (C) 2010 RECRUIT Corporation, All Rights Reserved.
+      RECRUIT Corporation CONFIDENTIAL.
+      
+	 ============================================================== -->
+
+<project name="LogTrain" default="scp_jar" basedir=".">
+
+	<description>
+		Apache Access Log Tranport Tools 
+	</description>
+
+	<!-- ==============================================================
+	      変数定義 / PATH設定
+	     ============================================================== -->
+	<property name="src" location="src" />
+	<property name="lib" location="lib" />
+	<property name="bin" location="bin" />
+	<property name="ext" location="ext" />
+	<property name="resources" location="resources" />
+	<property name="jarname" value="LogTrainServer" />
+	<property name="jar" value=".jar" />
+
+	<!-- ==============================================================
+	      target: jar
+	     ============================================================== -->
+	<!-- bin以下をローカルプロジェクト内でJarファイル化 -->
+	<target name="makejar" depends="build">
+		<jar destfile="${ext}/${jarname}${jar}">
+			<fileset dir="${bin}" />
+		</jar>
+	</target>
+
+	<!-- test,sampleを含むパッケージを除いてコンパイル -->
+	<target name="build" depends="clean">
+		<javac srcdir="${src}" destdir="${bin}" excludes="sample/**" deprecation="on">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar" />
+				</fileset>
+			</classpath>
+		</javac>
+		<echo message="${ant.project.name}: ${ant.file}" />
+	</target>
+
+	<!-- bin,jarファイルの初期化 -->
+	<target name="clean">
+		<delete dir="${bin}/jp" />
+		<delete dir="${bin}/sample" />
+		<delete dir="${ext}/${jarname}" />
+		<delete file="${ext}/${jarname}${jar}" />
+	</target>
+
+</project>

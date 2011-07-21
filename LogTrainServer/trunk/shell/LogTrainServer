@@ -1,0 +1,82 @@
+#! /bin/sh
+#
+# LogTransServer   Start/Stop 
+#
+# chkconfig: 345 01 99
+# description: 
+# processname: LogTransServer
+
+# Source function library.
+. /etc/init.d/functions
+
+prog="LogTransServer"
+
+export JAVA_HOME=/usr/java/latest
+export HADOOP_HOME=/usr/local/hadoop
+
+BDIR="/usr/local/logtrans"
+LOG_CONF="$BDIR/bin/logger.properties"
+APL_CONF="$BDIR/bin/logtrans.properties"
+CLASSPATH="$BDIR/bin/LogTransServer.jar:$HADOOP_HOME/hadoop-0.20.2-core.jar:$HADOOP_HOME/lib/commons-logging-1.0.4.jar"
+pid_file="/var/run/${prog}.pid"
+
+RETVAL=0
+
+start() {
+	echo -n $"Starting $prog: "
+	java -classpath $CLASSPATH -Djava.util.logging.config.file=$LOG_CONF LogTransServer $APL_CONF > /dev/null 2>&1 &
+	child_pid=$!
+
+	sleep 1
+	kill -0 $child_pid 2>/dev/null
+	RETVAL=$?
+
+	if [ $RETVAL -eq 0 ] ; then 
+		echo "$child_pid" > $pid_file	
+		action "" /bin/true
+	else
+		action "" /bin/false
+	fi
+	return $RETVAL
+}
+
+
+stop() {
+	echo -n $"Stopping $prog: "
+	kill `cat $pid_file 2>/dev/null` 2>/dev/null
+	RETVAL=$?
+	if [ $RETVAL -eq 0 ] ; then
+		sleep 1 
+		rm $pid_file
+		action "" /bin/true
+	else
+		action "" /bin/false
+	fi
+	return $RETVAL
+}
+
+restart() {
+	stop
+	start
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	status LogTransServer
+	;;
+  restart|reload)
+	restart
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|status|restart|reload}"
+	exit 1
+esac
+
+exit $?
