@@ -9,7 +9,7 @@
       
 	 ============================================================== -->
 
-<project name="LogTrain" default="scp_jar" basedir=".">
+<project name="LogTrain" default="makejar" basedir=".">
 
 	<description>
 		Apache Access Log Tranport Tools 

@@ -1,30 +1,30 @@
 #! /bin/sh
 #
-# LogTransServer   Start/Stop 
+# LogTrainServer   Start/Stop 
 #
 # chkconfig: 345 01 99
-# description: 
-# processname: LogTransServer
+# description: LogTrainServer
+# processname: LogTrainServer
 
 # Source function library.
 . /etc/init.d/functions
 
-prog="LogTransServer"
+prog="LogTrainServer"
 
 export JAVA_HOME=/usr/java/latest
 export HADOOP_HOME=/usr/local/hadoop
 
-BDIR="/usr/local/logtrans"
+BDIR="/usr/local/logtrain"
 LOG_CONF="$BDIR/bin/logger.properties"
-APL_CONF="$BDIR/bin/logtrans.properties"
-CLASSPATH="$BDIR/bin/LogTransServer.jar:$HADOOP_HOME/hadoop-0.20.2-core.jar:$HADOOP_HOME/lib/commons-logging-1.0.4.jar"
+APL_CONF="$BDIR/bin/logtrain.properties"
+CLASSPATH="$BDIR/bin/LogTrainServer.jar:$HADOOP_HOME/hadoop-0.20.2-core.jar:$HADOOP_HOME/lib/commons-logging-1.0.4.jar"
 pid_file="/var/run/${prog}.pid"
 
 RETVAL=0
 
 start() {
 	echo -n $"Starting $prog: "
-	java -classpath $CLASSPATH -Djava.util.logging.config.file=$LOG_CONF LogTransServer $APL_CONF > /dev/null 2>&1 &
+	java -classpath $CLASSPATH -Djava.util.logging.config.file=$LOG_CONF LogTrainServer $APL_CONF > /dev/null 2>&1 &
 	child_pid=$!
 
 	sleep 1
@@ -45,8 +45,8 @@ stop() {
 	echo -n $"Stopping $prog: "
 	kill `cat $pid_file 2>/dev/null` 2>/dev/null
 	RETVAL=$?
-	if [ $RETVAL -eq 0 ] ; then
-		sleep 1 
+	if [ $RETVAL -eq 0 ] ; then 
+		sleep 1
 		rm $pid_file
 		action "" /bin/true
 	else
@@ -69,7 +69,7 @@ case "$1" in
 	stop
 	;;
   status)
-	status LogTransServer
+	status LogTrainServer
 	;;
   restart|reload)
 	restart
