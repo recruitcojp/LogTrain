@@ -63,13 +63,13 @@ LogTrainはLogTrainServer、LogTrainClient、LogTrainCacheの３つのソフト�
 　LogTrainCache：サーバ障害時にLocal Cacheに貯められたログを転送
 
 
-  「Web Server」 　　　　　     「hadoop master Node」
+　「Web Server」　　　　　　　　「hadoop master Node」
 
 　　　Apache
 　　　　｜
 　LogTrainClient　－－－－－－＞　LogTrainServer -> (HDFS) -> ログ解析処理
 　　　　｜　　　　　　　｜　
-　 (LocalCache) 　　　　｜　
+　(LocalCache)　　　　　｜　
 　　　　｜　　　　　　　｜　
 　LogTrainCache 　－－－┘
 
@@ -96,12 +96,16 @@ LogTrainはLogTrainServer、LogTrainClient、LogTrainCacheの３つのソフト�
    #cp ext/LogTrainServer.jar /usr/local/logtrain/bin
    #cp resources/* /usr/local/logtrain/bin
    #cp shell/LogTrainServer /etc/init.d
-(3)自動起動設定
+(3)設定変更
+   #vi /usr/local/logtrain/bin/logger.properties
+   #vi /usr/local/logtrain/bin/logtrain.properties
+   環境にあわせて設定を変更してください。
+(4)自動起動設定
    #chkconfig LogTrainServer on
    #chkconfig --list LogTrainServer
-(4)LogTrainServer起動
+(5)LogTrainServer起動
    #service LogTrainServer start
-(5)LogTrainServer停止
+(6)LogTrainServer停止
    #service LogTrainServer stop
 
 ○LogTrannClientの導入方法(Webサーバで実行)
@@ -110,7 +114,10 @@ LogTrainはLogTrainServer、LogTrainClient、LogTrainCacheの３つのソフト�
    #make
    #make install(*)
    (*)/usr/local/logtrain/binにコピーされます（install先を変更したい場合はMakefileを変更してください） 
-(2)apache設定を変更
+(2)設定変更
+   #vi /usr/local/logtrain/bin/logtrain.properties
+   環境にあわせて設定を変更してください。
+(3)apache設定を変更
    #vi httpd.conf
 
    例) CustomLog "|/usr/local/logtrain/bin/LogTrainClient xxxx" combined
